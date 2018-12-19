@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private List<Float> distanceArray = new ArrayList<Float>();//存放接收的距离序列
 
+    private FileLogger mFileLogger = new FileLogger();
+
+    private boolean isRecord = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     case R.id.setDistance:
                         setDistance();
                         break;
+                    case R.id.startRecord:
+                        isRecord = true;
+                        mFileLogger.initData();
+                        break;
                     default:
                         break;
                 }
@@ -200,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //设定暂停按钮
         Button stopBtn = findViewById(R.id.stop);
         stopBtn.setOnClickListener(listener);
+
+        //设定记录按钮
+        Button recordBtn = findViewById(R.id.startRecord);
+        recordBtn.setOnClickListener(listener);
 
         Button searchBtn = findViewById(R.id.searchBtn);
         Button addNodeBtn = findViewById(R.id.addNode);
@@ -484,6 +496,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 if(rcvDis > 0){
                     distanceArray.add(rcvDis);
+                }
+                if(isRecord){
+                    mFileLogger.writeTxtToFile("当前距离:"+rcvDis,mFileLogger.getFilePath(),mFileLogger.getFileName());
                 }
                 //TODO:可以在此根据接收到的不同距离播放不同的内容
                 if(rcvDis > 25 && rcvDis < 35){

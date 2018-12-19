@@ -96,6 +96,23 @@
                 android:textSize="60px" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:background="@drawable/functionbutton"
+                android:id="@+id/startRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始记录数据"
+                android:textColor="#ffffff"
+                android:textSize="60px"
+                android:layout_marginRight="20px"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
