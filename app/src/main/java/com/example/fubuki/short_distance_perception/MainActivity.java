@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private float rcvDis; //从终端接收回来的距离
 
+    private List<Float> distanceArray = new ArrayList<Float>();//存放接收的距离序列
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -479,6 +481,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String[] strs = pattern.split(msgStr);
 
                 rcvDis = convertToFloat(strs[1],0);
+
+                if(rcvDis > 0){
+                    distanceArray.add(rcvDis);
+                }
                 //TODO:可以在此根据接收到的不同距离播放不同的内容
                 if(rcvDis > 25 && rcvDis < 35){
                     String text="你好！这是30米";
