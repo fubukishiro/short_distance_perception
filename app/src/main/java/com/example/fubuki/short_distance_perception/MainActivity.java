@@ -39,6 +39,7 @@ import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.baidu.tts.client.TtsMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -48,6 +49,7 @@ import static com.example.fubuki.short_distance_perception.Constant.DISCONN_BLE;
 import static com.example.fubuki.short_distance_perception.Constant.UPDATE_LIST;
 import static com.example.fubuki.short_distance_perception.Constant.UPDATE_STATUS;
 import static com.example.fubuki.short_distance_perception.MyUtils.convertToFloat;
+import static com.example.fubuki.short_distance_perception.MyUtils.convertToInt;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private boolean isRecord = false;
 
+    private int statusCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -488,11 +491,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.e(TAG,"真的有收到东西！");
                 byte[] bytesReceive = characteristic.getValue();
                 String msgStr = new String(bytesReceive);
-                //Pattern pattern = Pattern.compile("([0-9]+.[0-9]+)");
-                Pattern pattern = Pattern.compile("[(?<=addr|dis) (?=end)]+");
-                String[] strs = pattern.split(msgStr);
 
-                rcvDis = convertToFloat(strs[1],0);
+                String[] strs = msgStr.split("#");
+
+
+                switch(strs[0]){
+                    case "dis":
+                        rcvDis = convertToFloat(strs[1],0);
+                        Log.e(TAG,"接收到距离："+rcvDis);
+                        break;
+                    case "state":
+                        statusCode = convertToInt(strs[1],0);
+                        Log.e(TAG,"接收到状态:"+statusCode);
+                        break;
+                    default:
+                        System.out.println("unknown");
+                        break;
+                }
 
                 if(rcvDis > 0){
                     distanceArray.add(rcvDis);
@@ -501,8 +516,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     mFileLogger.writeTxtToFile("当前距离:"+rcvDis,mFileLogger.getFilePath(),mFileLogger.getFileName());
                 }
                 //TODO:可以在此根据接收到的不同距离播放不同的内容
-                if(rcvDis > 25 && rcvDis < 35){
+                /*if(rcvDis > 25 && rcvDis < 35){
                     String text="你好！这是30米";
+                    speak(text);
+                }*/
+
+                if(rcvDis <4){
+                    String text="你好！这是4米";
+                    speak(text);
+                }
+                if(rcvDis >20){
+                    String text="你好！这是20米";
                     speak(text);
                 }
                 if(rcvDis > saveDistance) {

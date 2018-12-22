@@ -16,4 +16,15 @@ public class MyUtils {
             return defaultValue;
         }
     }
+
+    public static int convertToInt(String number, int defaultValue) {
+        if (TextUtils.isEmpty(number)) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(number);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
 }
