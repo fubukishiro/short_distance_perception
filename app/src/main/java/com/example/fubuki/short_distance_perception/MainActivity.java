@@ -520,15 +520,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     String text="你好！这是30米";
                     speak(text);
                 }*/
-
-                if(rcvDis <4){
-                    String text="你好！这是4米";
-                    speak(text);
+                switch(statusCode){
+                    case 1:
+                        String text="你好！";
+                        speak(text);
+                        break;
+                    case 2:
+                        String text1="正在远离";
+                        speak(text1);
+                        break;
+                    case 3:
+                        String text2="正在靠近";
+                        speak(text2);
+                        break;
+                    case 4:
+                        String text3="警报";
+                        speak(text3);
+                        break;
+                    default:
+                        System.out.println("unknown");
+                        break;
                 }
-                if(rcvDis >20){
-                    String text="你好！这是20米";
-                    speak(text);
-                }
+                //if(rcvDis <4){
+                //   String text="你好！这是4米";
+                //   speak(text);
+                //}
+                //if(rcvDis >20){
+                //   String text="你好！这是20米";
+                //   speak(text);
+                // }
                 if(rcvDis > saveDistance) {
                     long [] vibratePattern = {100,400,100,400}; // 停止 开启 停止 开启
                     //第二个参数表示使用pattern第几个参数作为震动时间重复震动，如果是-1就震动一次
