@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private boolean isRecord = false;
 
     private int statusCode;
+
+    //三个方向的加速度值
+    private ArrayList<Float> xAcc = new ArrayList<>();
+    private ArrayList<Float> yAcc = new ArrayList<>();
+    private ArrayList<Float> zAcc = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -493,14 +499,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic){
                 super.onCharacteristicChanged(gatt,characteristic);
                 //发现服务后的响应函数
-                Log.e(TAG,"真的有收到东西！");
+
 
                 byte[] bytesReceive = characteristic.getValue();
                 String msgStr = new String(bytesReceive);
 
                 String[] strs = msgStr.split("#");
 
-
+                Log.e(TAG,msgStr);
                 switch(strs[0]){
                     case "dis":
                         rcvDis = convertToFloat(strs[1],0);
@@ -509,6 +515,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     case "state":
                         statusCode = convertToInt(strs[1],0);
                         Log.e(TAG,"接收到状态:"+statusCode);
+                        break;
+                    case "acc":
+                        xAcc.add(convertToFloat(strs[1],0));
+                        yAcc.add(convertToFloat(strs[2],0));
+                        zAcc.add(convertToFloat(strs[3],0));
                         break;
                     default:
                         System.out.println("unknown");

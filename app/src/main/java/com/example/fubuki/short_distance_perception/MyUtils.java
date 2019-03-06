@@ -64,6 +64,32 @@ public class MyUtils {
             return 0;
     }
 
+    /**
+     *
+     * @param xAcc
+     * @param yAcc
+     * @param zAcc
+     * @return status: 0: 静止; 1: 走动
+     */
+    public static int judgeAcc(List<Float> xAcc, List<Float> yAcc, List<Float> zAcc){
+        int currentNum = yAcc.size();
+        int distanceJudgeSize = 7; //判断所使用的窗口长度
+        int shakeCount = 0; //记录波动状态
+        double threshold = 4.0;
+        for(int i = currentNum - 1 ;i > currentNum - distanceJudgeSize;i--){
+            double temp1 = yAcc.get(i);
+            double temp2 = yAcc.get(i-1);
+
+            if((Math.abs(temp1 - temp2) >= threshold)&&(temp2 != 0))
+                shakeCount++;
+
+        }
+
+        if(shakeCount > Math.floor(distanceJudgeSize/2))
+            return 1;
+        else
+            return 0;
+    }
     public static void handleMessage(android.os.Handler handler, int command, String msg){
         Message tempMsg = new Message();
         tempMsg.what = command;

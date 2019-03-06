@@ -111,6 +111,13 @@
                 android:textSize="60px"
                 android:layout_marginRight="20px"/>
 
+            <TextView
+                android:id="@+id/trendShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="未判断趋势"
+                android:textSize="50px"
+                android:layout_marginRight="20px"/>
         </LinearLayout>
 
     </LinearLayout>
