@@ -546,16 +546,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     String text="你好！这是20米";
                     speak(text);
                 }*/
+                //距离判断
+                double judgeThreshold = 1.0; //用于防治跳变误判
+                if(rcvDis < 5 && Math.abs(rcvDis - distanceArray.get(distanceArray.size()-2)) < judgeThreshold){
+                    MyUtils.handleMessage(handler, Constant.DISPLAY_TREND, Constant.STATUS_ARRAY[3]);
+                    int moveStatus = MyUtils.judgeAcc(xAcc, yAcc, zAcc);
+                    if(moveStatus == 0){
+                        String text = "开始交互";
+                        MyUtils.handleMessage(handler, Constant.DISPLAY_TREND, Constant.STATUS_ARRAY[3]);
+                        speak(text);
+                    }else{
+                        MyUtils.handleMessage(handler, Constant.DISPLAY_TREND, Constant.STATUS_ARRAY[4]);
+                    }
+                }else{
+                    //距离大于5的时候的判断
+                    int status = MyUtils.judgeTrend(distanceArray,mFileLogger);
+                    MyUtils.handleMessage(handler, Constant.DISPLAY_TREND, Constant.STATUS_ARRAY[status]);
+                }
 
-                int status = MyUtils.judgeTrend(distanceArray,mFileLogger);
-                MyUtils.handleMessage(handler, Constant.DISPLAY_TREND, Constant.STATUS_ARRAY[status]);
-                if(rcvDis > saveDistance) {
+                /*if(rcvDis > saveDistance) {
                     long [] vibratePattern = {100,400,100,400}; // 停止 开启 停止 开启
                     //第二个参数表示使用pattern第几个参数作为震动时间重复震动，如果是-1就震动一次
                     distanceVibrator.vibrate(vibratePattern,2);
                 }else{
                     distanceVibrator.cancel();
-                }
+                }*/
                 Message tempMsg = new Message();
                 tempMsg.what = ADD_NODE;
                 tempMsg.obj = strs[1];
